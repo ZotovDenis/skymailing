@@ -1,0 +1,43 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6">
+        <div class="card" style="background-color: black; color: white; border: 2px solid white;">
+            <div class="card-header"><h4>Клиенты рассылки</h4></div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for object in object_list %}
+                    <li style="margin: 20px;">
+                        {{ object }}
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'mailing:mailing_list' %}" class="btn btn-info">Назад</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card" style="background-color: black; color: white; border: 2px solid white;">
+            <div class="card-header"><h4>Клиенты для добавления</h4></div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for object in clients %}
+                    <li style="margin: 20px;">
+                        {{ object }}
+                        <a class="float-end btn btn-outline-warning"
+                           href="{% url 'mailing:mailing_clients_toggle' mailing_pk object.pk %}">Убрать</a>
+                        <a class="float-end btn btn-outline-primary"
+                           href="{% url 'mailing:mailing_clients_toggle' mailing_pk object.pk %}">Добавить</a>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
