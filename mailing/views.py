@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import Http404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -18,11 +21,21 @@ class ClientListView(ListView):
     template_name = 'mailing/client_list.html'
     extra_context = {'title': 'Список клиентов'}
 
+    def get_queryset(self):
+        return Client.objects.filter(user=self.request.user)
+
 
 class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailing:client_list')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.user = self.request.user
+        self.object.save()
+
+        return super().form_valid(form)
 
 
 class ClientUpdateView(UpdateView):
@@ -60,9 +73,24 @@ class MessageDeleteView(DeleteView):
     success_url = reverse_lazy('mailing:message_list')
 
 
-class MailingListView(ListView):
+class MailingSettingsListView(ListView):
     model = MailingSettings
     extra_context = {'title': 'Список рассылок'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context
+
+    def get_queryset(self):
+        queryset = MailingSettings.objects.all()
+
+        if not self.request.user.is_staff and not self.request.user.is_superuser:
+            queryset = queryset.filter(user=self.request.user)
+
+        return queryset
+
+        # return MailingSettings.objects.filter(user=self.request.user)
 
 
 class MailingSettingsCreateView(CreateView):
@@ -72,14 +100,18 @@ class MailingSettingsCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        form = self.get_form()
-
-        context['time_field'] = form['time']
-        context['period_field'] = form['period']
-        context['status_field'] = form['status']
-        context['message_field'] = form['message']
-        context['clients'] = form['clients']
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
 
 class MailingSettingsUpdateView(UpdateView):
@@ -87,6 +119,35 @@ class MailingSettingsUpdateView(UpdateView):
     form_class = MailingSettingsForm
 
     success_url = reverse_lazy('mailing:mailing_list')
+    pk_url_kwarg = 'pk'
+    permission_required = 'mailing.modify_settings_status'
+
+    def get_object(self, queryset=None):
+        return MailingSettings.objects.get(pk=self.kwargs.get(self.pk_url_kwarg))
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+############################ Данный участок кода требует корректировки и уточнения #################################
+
+        # Проверка, является ли пользователь сотрудником
+        if self.request.user.is_staff:
+            mailing_settings = self.object
+
+            # Если пользователь является сотрудником и рассылка принадлежит другому пользователю,
+            # то они могут изменять только поле статуса
+            if mailing_settings.user != self.request.user:
+                mailing_settings.status = form.cleaned_data['status']
+
+####################################################################################################################
+        self.object.save()
+
+        return super().form_valid(form)
 
 
 class MailingSettingsDeleteView(DeleteView):

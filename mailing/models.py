@@ -10,7 +10,7 @@ class Client(models.Model):
     first_name = models.CharField(**NULLABLE, verbose_name='Имя', max_length=150)
     last_name = models.CharField(**NULLABLE, verbose_name='Фамилия', max_length=150)
     comment = models.TextField(**NULLABLE, verbose_name='Комментарий')
-    # user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец клиента', default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец клиента', default=1)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name} ({self.email})'
@@ -57,6 +57,7 @@ class MailingSettings(models.Model):
     status = models.CharField(max_length=20, choices=STATUSES, default=STATUS_CREATED, verbose_name='Статус')
     clients = models.ManyToManyField(Client, verbose_name='Получатели рассылки')
     message = models.ForeignKey(MailingMessage, on_delete=models.CASCADE, verbose_name='Сообщение', **NULLABLE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец рассылки', default=1)
 
     def __str__(self):
         return f'{self.time} / {self.period}'
@@ -64,6 +65,9 @@ class MailingSettings(models.Model):
     class Meta:
         verbose_name = 'Настройка'
         verbose_name_plural = 'Настройки'
+        permissions = [
+            ("modify_settings_status", "Изменить статус рассылки")
+        ]
 
 
 class MailingLog(models.Model):

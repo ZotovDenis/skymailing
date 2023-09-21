@@ -10,16 +10,28 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             {% if object %}
-                                Изменение рассылки
-                                {% else %}
-                                Добавление рассылки
-                                {% endif%}
+                            Изменение рассылки
+                            {% else %}
+                            Добавление рассылки
+                            {% endif%}
                         </h3>
                     </div>
                     <div class="card-body">
                         <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            {{ form.as_p }}
+
+                            {% if not object or object.user == request.user %}
+                                {{ form.as_p }}
+
+                            {% else %}
+                                {{ form.status.label_tag }} {{ form.status }}
+
+                            {% endif %}
+
+                            {% for field in form %}
+                            {{ field.errors }}
+                            {% endfor %}
+
                             <button class="btn btn-outline-success" type="submit">
                                 {% if object %}
                                 Сохранить
@@ -27,7 +39,8 @@
                                 Создать
                                 {% endif%}
                             </button>
-                            <a href="{% url 'mailing:mailing_list' %}" class="btn btn-outline-primary" type="submit">Вернуться к рассылкам</a>
+                            <a href="{% url 'mailing:mailing_list' %}" class="btn btn-outline-primary" type="submit">Вернуться
+                                к рассылкам</a>
                         </form>
                     </div>
                 </div>
