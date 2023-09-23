@@ -1,0 +1,35 @@
+{% extends 'mailing/base.html' %}
+{% load my_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row featurette box-shadow ">
+
+        <div class="col-12" style="text-align: center;">
+            <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
+            <br>
+        </div>
+
+        <div class="col-md-7 text-left">
+            <img class="card-img-top" src="{{ object.image|mymedia }}" alt="blog_image">
+        </div>
+        <div class="col-md-5">
+            <p>{{ object.content }}</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-6">
+                <br><br>
+                <p>Просмотры: {{ object.views_count }}</p>
+            </div>
+            <div class="col-md-6">
+                <br><br>
+                <p>Дата создания статьи: {{ object.created_date}}</p>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <a href="javascript:history.back()" type="button" class="btn btn-outline-primary">Назад</a>
+</div>
+
+{% endblock %}

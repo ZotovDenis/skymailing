@@ -11,9 +11,9 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             {% if object %}
-                                Изменение письма
+                                Изменение статьи
                                 {% else %}
-                                Добавление письма
+                                Добавление статьи
                                 {% endif%}
                         </h3>
                     </div>
@@ -28,7 +28,7 @@
                                 Создать
                                 {% endif%}
                             </button>
-                            <a href="{% url 'mailing:message_list' %}" class="btn btn-outline-primary" type="submit">Вернуться к письмам</a>
+                            <a href="{% url 'blog:list' %}" class="btn btn-outline-primary" type="submit">Вернуться к списку статей</a>
                         </form>
                     </div>
                 </div>

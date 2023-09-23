@@ -24,22 +24,27 @@
                                 {{ form.as_p }}
 
                             {% else %}
+
+                                {{ form.time.as_hidden }}
+                                {{ form.period.as_hidden }}
                                 {{ form.status.label_tag }} {{ form.status }}
+                                {{ form.clients.as_hidden }}
+                                {{ form.message.as_hidden }}
 
                             {% endif %}
 
                             {% for field in form %}
-                            {{ field.errors }}
+                                {{ field.errors }}
                             {% endfor %}
 
-                            <button class="btn btn-outline-success" type="submit">
+                            <button class="btn btn-outline-success" type="submit" style="margin-top: 20px;">
                                 {% if object %}
                                 Сохранить
                                 {% else %}
                                 Создать
                                 {% endif%}
                             </button>
-                            <a href="{% url 'mailing:mailing_list' %}" class="btn btn-outline-primary" type="submit">Вернуться
+                            <a href="{% url 'mailing:mailing_list' %}" class="btn btn-outline-primary" type="submit" style="margin-top: 20px;">Вернуться
                                 к рассылкам</a>
                         </form>
                     </div>

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 
 from users.models import User
 
@@ -9,6 +9,11 @@ class StyleFormMixin:
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
+
+class UserLoginForm(StyleFormMixin, AuthenticationForm):
+    class Meta:
+        fields = ['username', 'password']
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):

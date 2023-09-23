@@ -1,0 +1,53 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+
+<div class="row" style="margin-top: 50px;">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <div class="card" style="background-color: black; color: white; border: 2px solid white;">
+
+            <div class="card-body">
+                <div class="col-12" style="display:flex;">
+                    <div class="col-4" style="text-align: center;">
+                        <p style="font-size: 20px;"><I>Количество рассылок: &nbsp <strong
+                                style="font-size: 30px;">{{ settings_list|length }}</strong></I></p>
+                    </div>
+                    <div class="col-4" style="text-align: center;">
+                        <p style="font-size: 20px;"><I>Количество запущенных рассылок: &nbsp <strong
+                                style="font-size: 30px;">{{ active_settings|length }}</strong></I>
+                        </p></div>
+                    <div class="col-4" style="text-align: center;">
+                        <p style="font-size: 20px;"><I>Количество уникальных клиентов: &nbsp <strong
+                                style="font-size: 30px;">{{ client_list|length }}</strong></I>
+                        </p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>
+
+<div class="row text-center" style="margin: 50px;">
+    {% for article in blog_list %}
+    <div class="col-4">
+        <div class="card mb-4 box-shadow" style="background: black; border-color: white; color: white;">
+            <div class="card-body">
+
+                <p class="card-text" style="height: 20px; font-size: 20px;"><strong>
+                    {{ article.title }}
+                </strong></p>
+                <img class="card-img-top" src="{{ article.image.url }}" alt="blog_image" style="object-fit: contain; height: 500px;">
+            </div>
+            <div class="card-footer">
+                <p class="card-text">
+                    <I>Просмотры: {{ article.views_count }}</I>
+                </p>
+                <a href="{% url 'blog:view' article.pk %}" class="btn btn-md btn-outline-primary">Читать</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'mailing/base.html' %}
+
+
+{% block content %}
+
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+        <div class="col-6 mx-auto text-center">
+            <div class="alert alert-danger">
+                <h2 class="alert-heading">Ваш доступ к этому сайту временно заблокирован.</h2>
+                <p style="font-size: 20px;">Причина блокировки может быть связана с нарушением правил пользования сайтом, нарушением
+                безопасности или другими причинами, не совместимыми с дальнейшим использованием этого сайта.</p>
+                <p style="font-size: 20px;">Обратитесь к администрации сайта, чтобы уточнить причину блокировки и попробовать решить эту проблему:</p>
+                <p style="font-size: 22px;"><a href="#">support@skymailing.com</a></p>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

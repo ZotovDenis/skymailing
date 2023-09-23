@@ -1,19 +1,17 @@
 {% extends 'mailing/base.html' %}
-{% load static %}
-
 {% block content %}
 
-
-<div class="col-12">
-    <div class="row justify-content-center align-items-center">
+<div class="col-12" style="margin-left: 50px; text-align: center;">
+    <div class="row">
+        <div class="col-3"></div>
         <div class="col-6">
-            <div class="card" style="background-color: black; color: white; border: 1px solid red;">
+            <div class="card" style="background: black; border-color: white; color: white;">
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
-                        <p>Удалить клиента {{ object }}?</p>
+                        <p>Удалить статью "{{ object.title }}"?</p>
                         <button type="submit" class="btn btn-danger">Удалить</button>
-                        <a href="{% url 'mailing:client_list' %}" class="btn btn-outline-primary">Отменить</a>
+                        <a href="{% url 'blog:list' %}" class="btn btn-primary">Отменить</a>
                     </form>
                 </div>
             </div>
