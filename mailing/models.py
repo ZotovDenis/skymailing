@@ -60,7 +60,7 @@ class MailingSettings(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец рассылки', default=1)
 
     def __str__(self):
-        return f'{self.time} / {self.period}'
+        return f'{self.time} / {self.period} / {self.message}'
 
     class Meta:
         verbose_name = 'Настройка'
@@ -78,9 +78,9 @@ class MailingLog(models.Model):
         (STATUS_FAILED, 'Ошибка'),
     )
 
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Клиент')
     settings = models.ForeignKey(MailingSettings, on_delete=models.CASCADE, verbose_name='Настройка')
     status = models.CharField(choices=STATUSES, default=STATUS_OK, verbose_name='Статус')
+    response = models.CharField(max_length=200, default='None', verbose_name='Ответ сервера')
     last_try = models.DateTimeField(auto_now_add=True, verbose_name='Дата последней попытки')
 
     class Meta:

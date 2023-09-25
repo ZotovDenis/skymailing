@@ -2,7 +2,7 @@ import random
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -32,12 +32,6 @@ class UserUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     success_url = reverse_lazy('mailing:user_list')
     permission_required = 'users.set_active'
     fields = ['is_active', ]
-
-    # def form_valid(self, form):
-    #     user = form.instance
-    #     if not user.is_active:
-    #         return redirect(reverse_lazy('users:blocked'))
-    #     return super().form_valid(form)
 
 
 def users(request):
@@ -117,12 +111,12 @@ class MailingSettingsListView(ListView):
     def get_queryset(self):
         queryset = MailingSettings.objects.all()
 
+        # Если пользователь не менеджер и не админ, выводить только его персональные рассылки,
+        # в противном случае - вывести все рассылки
         if not self.request.user.is_staff and not self.request.user.is_superuser:
             queryset = queryset.filter(user=self.request.user)
 
         return queryset
-
-        # return MailingSettings.objects.filter(user=self.request.user)
 
 
 class MailingSettingsCreateView(CreateView):
@@ -135,8 +129,9 @@ class MailingSettingsCreateView(CreateView):
         return context
 
     def get_form_kwargs(self):
+        # Необходимо для связки с клиентами пользователя
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.object.user
+        kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
@@ -158,14 +153,13 @@ class MailingSettingsUpdateView(UpdateView):
         return MailingSettings.objects.get(pk=self.kwargs.get(self.pk_url_kwarg))
 
     def get_form_kwargs(self):
+        # Необходимо для связки с клиентами пользователя
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.object.user
         return kwargs
 
     def form_valid(self, form):
         self.object = form.save()
-
-        ############################ Данный участок кода требует корректировки и уточнения #################################
 
         # Проверка, является ли пользователь сотрудником
         if self.request.user.is_staff:
@@ -176,7 +170,6 @@ class MailingSettingsUpdateView(UpdateView):
             if mailing_settings.user != self.request.user:
                 mailing_settings.status = form.cleaned_data['status']
 
-        ####################################################################################################################
         self.object.save()
 
         return super().form_valid(form)

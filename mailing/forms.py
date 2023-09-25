@@ -11,7 +11,6 @@ class StyleFormMixin:
 
 
 class MailingSettingsForm(StyleFormMixin, forms.ModelForm):
-
     clients = forms.ModelMultipleChoiceField(queryset=None)
 
     def __init__(self, *args, **kwargs):
