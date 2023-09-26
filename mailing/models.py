@@ -79,7 +79,7 @@ class MailingLog(models.Model):
     )
 
     settings = models.ForeignKey(MailingSettings, on_delete=models.CASCADE, verbose_name='Настройка')
-    status = models.CharField(choices=STATUSES, default=STATUS_OK, verbose_name='Статус')
+    status = models.CharField(max_length=50, choices=STATUSES, default=STATUS_OK, verbose_name='Статус')
     response = models.CharField(max_length=200, default='None', verbose_name='Ответ сервера')
     last_try = models.DateTimeField(auto_now_add=True, verbose_name='Дата последней попытки')
 

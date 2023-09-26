@@ -98,6 +98,20 @@ __*pip install -r requirements.txt*__
 
 `sudo service redis-server start`
 
+- Выполните в терминале команды:
+
+*Windows:*
+
+`python manage.py migrate`
+
+`python manage.py loaddata blog_data.json`
+
+*MacOS / Linux:*
+
+`python3 manage.py migrate`
+
+`python3 manage.py loaddata blog_data.json`
+
 - __Авторизуйтесь и наполните БД необходимыми данными (для user - Клиенты и Рассылки, для admin и manager - Письма).__
 
 
@@ -106,7 +120,7 @@ __*pip install -r requirements.txt*__
 *Windows:*
 `python manage.py runserver`
 
-*MacOS/Linux:*
+*MacOS / Linux:*
 `python3 manage.py runserver`
 
 - В дополнительном окне терминала запустите APScheduler командой:
@@ -114,7 +128,7 @@ __*pip install -r requirements.txt*__
 *Windows:*
 `python manage.py runapscheduler`
 
-*MacOS/Linux:*
+*MacOS / Linux:*
 `python3 manage.py runapscheduler`
 
 ### Завершение работы
