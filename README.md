@@ -1,5 +1,11 @@
 # *Проект SkyMailing - Сервис рассылки на почту*
-____
+
+![Python](https://img.shields.io/badge/Python-3.11-FFD43B?logo=python)
+![Django](https://img.shields.io/badge/Django-4.2.4-silver?logo=django)
+![Redis](https://img.shields.io/badge/Redis-5.0.0-red?logo=redis)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15.6-blue?logo=postgresql)
+![JavaScript](https://img.shields.io/badge/JavaScript-65757d?logo=javascript)
+
 ## Описание
 ### Представленный проект служит для организации запланированных рассылок персональным клиентам. 
 
